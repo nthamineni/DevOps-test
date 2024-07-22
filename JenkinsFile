@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+    
+    stages {
+         stage('Clone repository') { 
+            steps { 
+                script{
+                git branch: 'main',
+                credentialsId: 'jenkins-key',
+                url: 'git clone git@github.com:nthamineni/test-app.git'
+                }
+            }
+        }
+            stage('Build') { 
+            steps { 
+                script{
+                sh npm build package.json
+                }
+            }
+        }    
+            stage('Test') { 
+            steps { 
+                script{
+                sh npm run test
+                }
+            } 
+        }
+            stage('Deploy') { 
+            steps { 
+                script{
+                sh npm start
+                }
+            } 
+        } 
+    }
+}
